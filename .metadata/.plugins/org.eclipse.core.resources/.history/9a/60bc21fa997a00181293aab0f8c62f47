@@ -1,0 +1,57 @@
+package moduleLevelTestScripts;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Map;
+
+import com.aventstack.extentreports.ExtentTest;
+
+import generic.DataBaseVerification;
+import generic.ExcelComparator;
+
+public class VerifyIncomeSchedule
+{
+
+
+	public void fetchExpectedIncomeSchedule(Map<String,String> map) throws IOException, SQLException 
+	{
+		DataBaseVerification databaseverification = new DataBaseVerification();
+		databaseverification.fetchinDataFromDBInToExcelExpected(map.get("ExpectedIncomeScheduleQuery"), map.get("ExpectedIncomeScheduleResultExcelName"), "IncomeScheduleValues");
+	}
+	
+	
+	public void fetchandCompareActualIncomeSchedule(Map<String,String> map, ExtentTest test) throws IOException, SQLException 
+	{
+		DataBaseVerification databaseverification = new DataBaseVerification();
+		databaseverification.fetchinDataFromDBInToExcelActual
+		("select IncomeTerm,StepNumber,IncomeDate,LeasePaymentAmount,LessorBeginNetBookValue \r\n" + 
+				"LessorEndNetBookValue,CustomerBeginNetBookValue,CustomerEndNetBookValue,PrimaryIncome,PrimaryIncomeBalance,IDCExpense,IDCExpenseBalance,ResidualIncome,\r\n" + 
+				"ResidualIncomeBalance,MarkupIncome,MarkupIncomeBalance,InterestExpenseAmount,StraightLineInterestExpenseAmount,DeferredInterestExpenseAmount,CustomerPrimaryIncome,\r\n" + 
+				"RentalIncome,DeferredRentalIncome,FloatRateAdjustmentAmount,InterestExpenceAdjustmentAmount,FloatRateChargeAmount,CumulativeFloatAdjustmentIncome,IsIDCCapitalizedToInvestment,\r\n" + 
+				"DeferredSellingProfitIncome,DeferredSellingProfitBalance,IncomeWithoutProfit,FinanceLeasePaymentAmount,FinanceLessorBeginNetBookValue,FinanceLessorEndNetBookValue,\r\n" + 
+				"FinanceCustomerBeginNetBookValue,FinanceCustomerEndNetBookValue,FinancePrimaryIncome,FinancePrimaryIncomeBalance,FinanceIDCExpense,FinanceIDCExpenseBalance,FinanceResidualIncome,\r\n" + 
+				"FinanceResidualIncomeBalance,FinanceMarkupIncome,FinanceMarkupIncomeBalance,FinanceCustomerPrimaryIncome\r\n" + 
+				"\r\n" + 
+				"from Lease_IncomeSchedule where Leaseid in ( select LeaseId from Lease_profile where sequencenumber =" + "'" + map.get("Lease_sequenceNumber") + "'" + ") and isactive = 1", map.get("ActualIncomeScheduleResultExcelName"), "IncomeScheduleValues");
+
+		ExcelComparator excelcomparator =  new ExcelComparator();
+		excelcomparator.compareTwoExcel(map.get("ExpectedIncomeScheduleResultExcelName") , map.get("ActualIncomeScheduleResultExcelName"), "pass", test);	
+	}
+	
+	public void fetchActualIncomeSchedule(String LeaseSequenceNumber,Map<String,String> map, ExtentTest test) throws IOException, SQLException 
+	{
+		DataBaseVerification databaseverification = new DataBaseVerification();
+		databaseverification.fetchinDataFromDBInToExcelActual
+		("select IncomeTerm,StepNumber,IncomeDate,LeasePaymentAmount,LessorBeginNetBookValue \r\n" + 
+				"LessorEndNetBookValue,CustomerBeginNetBookValue,CustomerEndNetBookValue,PrimaryIncome,PrimaryIncomeBalance,IDCExpense,IDCExpenseBalance,ResidualIncome,\r\n" + 
+				"ResidualIncomeBalance,MarkupIncome,MarkupIncomeBalance,InterestExpenseAmount,StraightLineInterestExpenseAmount,DeferredInterestExpenseAmount,CustomerPrimaryIncome,\r\n" + 
+				"RentalIncome,DeferredRentalIncome,FloatRateAdjustmentAmount,InterestExpenceAdjustmentAmount,FloatRateChargeAmount,CumulativeFloatAdjustmentIncome,IsIDCCapitalizedToInvestment,\r\n" + 
+				"DeferredSellingProfitIncome,DeferredSellingProfitBalance,IncomeWithoutProfit,FinanceLeasePaymentAmount,FinanceLessorBeginNetBookValue,FinanceLessorEndNetBookValue,\r\n" + 
+				"FinanceCustomerBeginNetBookValue,FinanceCustomerEndNetBookValue,FinancePrimaryIncome,FinancePrimaryIncomeBalance,FinanceIDCExpense,FinanceIDCExpenseBalance,FinanceResidualIncome,\r\n" + 
+				"FinanceResidualIncomeBalance,FinanceMarkupIncome,FinanceMarkupIncomeBalance,FinanceCustomerPrimaryIncome\r\n" + 
+				"\r\n" + 
+				"from Lease_IncomeSchedule where Leaseid in ( select LeaseId from Lease_profile where sequencenumber =" + "'" +LeaseSequenceNumber + "'" + ") and isactive = 1", map.get("ActualIncomeScheduleResultExcelName"), "IncomeScheduleValues");
+
+	}
+	
+}

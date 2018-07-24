@@ -1,0 +1,8 @@
+1526905354950	Move 'E2E_SCN02.xml' to 'TestNG-Xml'
+1526980607452	Rename local variable 'ltrtoarupdatepage'
+1526981201755	Rename local variable 'incomerecognitionupdatepage'
+1526981235462	Rename local variable 'IncomeRecogjobstatus'
+1526981635871	Rename local variable 'ltrtoar_incomerecog_e2e'
+1527251925957	Rename local variable 'lp'
+1527252991245	Delete element
+1527253056758	Delete elements
